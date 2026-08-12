@@ -35,8 +35,11 @@ export function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <NeonOrbs />
+      <p className="relative z-10 mb-4 text-center text-lg font-medium text-white">
+        AI-Powered Web Content Analyzer &amp; Management Tool
+      </p>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center">{isLogin ? 'Welcome Back' : 'Create Account'}</CardTitle>
