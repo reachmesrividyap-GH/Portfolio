@@ -1,0 +1,324 @@
+<div id="ces-root">
+  <style>
+    #ces-root {
+      --ink: #1c2b24;
+      --paper: #f6f4ee;
+      --panel: #ffffff;
+      --line: #d8d3c4;
+      --signal-low: #4a7c59;
+      --signal-high: #b5482f;
+      --accent: #2f5233;
+      --mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
+      --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      min-height: 100%;
+      padding: 32px 20px 60px;
+      box-sizing: border-box;
+    }
+    #ces-root * { box-sizing: border-box; }
+    .ces-wrap { max-width: 640px; margin: 0 auto; }
+    .ces-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .ces-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--signal-low);
+      border-radius: 50%;
+      display: inline-block;
+      animation: ces-pulse 2s ease-in-out infinite;
+    }
+    @keyframes ces-pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+    h1 {
+      font-family: var(--mono);
+      font-size: 26px;
+      font-weight: 600;
+      margin: 0 0 4px;
+      letter-spacing: -0.01em;
+    }
+    .ces-sub {
+      font-size: 14px;
+      color: #5a6b60;
+      margin: 0 0 28px;
+      line-height: 1.5;
+    }
+    .ces-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+    .ces-panel h2 {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #7c8a80;
+      margin: 0 0 14px;
+      font-weight: 600;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #445048;
+    }
+    input[type=text], input[type=url], input[type=number], select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    input:focus, select:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .ces-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .ces-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+    .ces-chip {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      cursor: pointer;
+      color: var(--ink);
+      transition: border-color .15s, background .15s;
+    }
+    .ces-chip:hover { border-color: var(--accent); background: #eef1ea; }
+    .ces-chip.ces-high { color: var(--signal-high); }
+    .ces-chip.ces-low { color: var(--signal-low); }
+    button.ces-send {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    button.ces-send:hover { background: #22401f; }
+    button.ces-send:active { transform: scale(0.99); }
+    button.ces-send:disabled { background: #a9b3ac; cursor: not-allowed; }
+    .ces-log {
+      font-family: var(--mono);
+      font-size: 12px;
+      max-height: 260px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .ces-entry {
+      border-left: 3px solid var(--line);
+      padding: 8px 10px;
+      background: var(--paper);
+      border-radius: 0 6px 6px 0;
+    }
+    .ces-entry.ok { border-left-color: var(--signal-low); }
+    .ces-entry.err { border-left-color: var(--signal-high); }
+    .ces-entry-top { display: flex; justify-content: space-between; color: #7c8a80; margin-bottom: 3px; }
+    .ces-entry-body { color: var(--ink); white-space: pre-wrap; word-break: break-word; }
+    .ces-empty { color: #a3ac9f; font-size: 13px; padding: 6px 2px; }
+    .ces-hint { font-size: 12px; color: #7c8a80; margin: -8px 0 14px; line-height: 1.5; }
+  </style>
+
+  <div class="ces-wrap">
+    <div class="ces-eyebrow">Ingestion Test Console</div>
+    <h1>Send a checkout event</h1>
+    <p class="ces-sub">Fires a test POST at your n8n Agent 1 webhook, exactly like a real checkout would. Fill in the fields or tap a preset, then send.</p>
+
+    <div class="ces-panel">
+      <h2>Webhook target</h2>
+      <label for="ces-url">Webhook URL</label>
+      <input type="url" id="ces-url" placeholder="https://your-instance.app.n8n.cloud/webhook/checkout-event" />
+      <div class="ces-hint">Use the Production URL once the workflow is Activated, or the Test URL while "Listen for test event" is running in the editor.</div>
+    </div>
+
+    <div class="ces-panel">
+      <h2>Presets</h2>
+      <div class="ces-presets">
+        <button type="button" class="ces-chip ces-low" data-preset="low">Low value / Address</button>
+        <button type="button" class="ces-chip ces-high" data-preset="payment">Payment failure</button>
+        <button type="button" class="ces-chip ces-high" data-preset="highvalue">High cart value</button>
+        <button type="button" class="ces-chip ces-high" data-preset="mobile">Mobile pattern</button>
+        <button type="button" class="ces-chip" data-preset="invalid">Invalid payload</button>
+      </div>
+    </div>
+
+    <div class="ces-panel">
+      <h2>Event details</h2>
+      <div class="ces-row">
+        <div>
+          <label for="ces-step">Checkout step</label>
+          <select id="ces-step">
+            <option value="PAYMENT">PAYMENT</option>
+            <option value="ADDRESS">ADDRESS</option>
+            <option value="SHIPPING">SHIPPING</option>
+          </select>
+        </div>
+        <div>
+          <label for="ces-device">Device</label>
+          <select id="ces-device">
+            <option value="MOBILE">MOBILE</option>
+            <option value="DESKTOP">DESKTOP</option>
+          </select>
+        </div>
+      </div>
+      <label for="ces-value">Cart value</label>
+      <input type="number" id="ces-value" value="120" min="0" step="1" />
+
+      <label for="ces-tag">Source tag <span style="font-weight:400; color:#7c8a80;">(traceability only — not used in severity logic)</span></label>
+      <input type="text" id="ces-tag" value="manual_test" />
+
+      <div id="ces-override" style="display:none; margin-bottom:14px; padding:10px 12px; border:1px solid var(--signal-high); border-radius:6px; background:#fbeee9;">
+        <div style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--signal-high); margin-bottom:6px;">
+          Using raw override — form fields above are ignored for this send
+        </div>
+        <div id="ces-override-json" style="font-family:var(--mono); font-size:12px; white-space:pre-wrap; word-break:break-word; margin-bottom:8px;"></div>
+        <button type="button" id="ces-override-clear" style="font-family:var(--mono); font-size:11px; padding:5px 10px; border:1px solid var(--line); border-radius:6px; background:#fff; cursor:pointer;">Clear override, use form instead</button>
+      </div>
+
+      <button class="ces-send" id="ces-submit">Send event</button>
+    </div>
+
+    <div class="ces-panel">
+      <h2>Log</h2>
+      <div class="ces-log" id="ces-log">
+        <div class="ces-empty">No events sent yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    const root = document.getElementById('ces-root');
+    const urlInput = root.querySelector('#ces-url');
+    const stepSel = root.querySelector('#ces-step');
+    const deviceSel = root.querySelector('#ces-device');
+    const valueInput = root.querySelector('#ces-value');
+    const tagInput = root.querySelector('#ces-tag');
+    const sendBtn = root.querySelector('#ces-submit');
+    const log = root.querySelector('#ces-log');
+
+    // source_tag is a traceability label only — it identifies which test scenario produced
+    // an event so you can find it later in the Cart Events sheet. Agent 2's severity logic
+    // never reads it; only checkout_step / cart_value / device drive ALERT vs LOG decisions.
+    const presets = {
+      low:      { checkout_step: 'ADDRESS', cart_value: 45,   device: 'MOBILE',  source_tag: 'preset_low_value_address' },
+      payment:  { checkout_step: 'PAYMENT', cart_value: 899,  device: 'DESKTOP', source_tag: 'preset_payment_failure' },
+      highvalue:{ checkout_step: 'SHIPPING', cart_value: 4599, device: 'DESKTOP', source_tag: 'preset_high_cart_value' },
+      mobile:   { checkout_step: 'SHIPPING', cart_value: 120, device: 'MOBILE',  source_tag: 'preset_mobile_pattern' },
+      invalid:  { checkout_step: 'UNKNOWN_STEP', cart_value: 'not-a-number', device: 'MOBILE', source_tag: 'preset_invalid_payload' }
+    };
+
+    const overrideBox = root.querySelector('#ces-override');
+    const overrideJson = root.querySelector('#ces-override-json');
+    const overrideClear = root.querySelector('#ces-override-clear');
+    let rawOverride = null; // set only for payloads the form can't represent (e.g. invalid preset)
+
+    function clearOverride() {
+      rawOverride = null;
+      overrideBox.style.display = 'none';
+    }
+
+    // Any manual edit to the form drops back to normal form-based sending
+    [stepSel, deviceSel, valueInput, tagInput].forEach(el => el.addEventListener('input', clearOverride));
+    overrideClear.addEventListener('click', clearOverride);
+
+    root.querySelectorAll('[data-preset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = presets[btn.dataset.preset];
+        const representable = ['PAYMENT','ADDRESS','SHIPPING'].includes(p.checkout_step) && typeof p.cart_value === 'number';
+
+        if (representable) {
+          clearOverride();
+          stepSel.value = p.checkout_step;
+          deviceSel.value = p.device;
+          valueInput.value = p.cart_value;
+          tagInput.value = p.source_tag;
+        } else {
+          // This payload can't be represented by the form (e.g. cart_value isn't numeric,
+          // or checkout_step isn't one of the dropdown options) — show it explicitly as a
+          // raw override instead of silently sending it. Nothing sends until "Send event" is clicked.
+          rawOverride = p;
+          overrideJson.textContent = JSON.stringify(p, null, 2);
+          overrideBox.style.display = 'block';
+        }
+      });
+    });
+
+    function addLogEntry(ok, label, body) {
+      const empty = log.querySelector('.ces-empty');
+      if (empty) empty.remove();
+      const entry = document.createElement('div');
+      entry.className = 'ces-entry ' + (ok ? 'ok' : 'err');
+      const time = new Date().toLocaleTimeString();
+      entry.innerHTML = '<div class="ces-entry-top"><span>' + label + '</span><span>' + time + '</span></div><div class="ces-entry-body"></div>';
+      entry.querySelector('.ces-entry-body').textContent = body;
+      log.prepend(entry);
+    }
+
+    async function sendPayload(payload) {
+      const url = urlInput.value.trim();
+      if (!url) {
+        addLogEntry(false, 'Missing URL', 'Paste your n8n webhook URL above first.');
+        return;
+      }
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending...';
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const text = await res.text();
+        addLogEntry(res.ok, (res.ok ? 'Sent — ' : 'Failed — ') + res.status + ' ' + JSON.stringify(payload), text || '(empty response)');
+      } catch (err) {
+        addLogEntry(false, 'Network error', String(err) + '\n\nIf this is a CORS error, your n8n webhook needs to allow browser requests, or test with curl/Postman instead.');
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send event';
+      }
+    }
+
+    sendBtn.addEventListener('click', () => {
+      if (rawOverride) {
+        sendPayload(rawOverride);
+        return;
+      }
+      sendPayload({
+        checkout_step: stepSel.value,
+        cart_value: Number(valueInput.value),
+        device: deviceSel.value,
+        source_tag: tagInput.value.trim() || 'manual_test'
+      });
+    });
+  })();
+  </script>
+</div>

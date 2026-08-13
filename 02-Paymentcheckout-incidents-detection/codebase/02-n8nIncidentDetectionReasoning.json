@@ -1,0 +1,941 @@
+{
+  "name": "02-n8nIncidentDetectionReasoning",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "checkout-event",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2368,
+        608
+      ],
+      "id": "805927e4-43a6-4c15-83c9-9446a6ccb0fc",
+      "name": "IngestionWebhook",
+      "webhookId": "8803666b-34e7-4469-b7c6-8676f2cb32ae"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64e3f74f-9f1b-45b7-8e4b-a1b98e3a2b95",
+              "name": "timestamp",
+              "value": "={{ $json.body.timestamp ?? $now.setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "96efc2a8-4957-444d-91e7-5766baf1cb54",
+              "name": "checkout_step",
+              "value": "={{ $json.body.checkout_step.toUpperCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "83ab9956-df8c-4234-a46c-cc499e2bd735",
+              "name": "cart_value",
+              "value": "={{ isNaN(Number($json.body.cart_value)) ? -1 : Number($json.body.cart_value) }}",
+              "type": "number"
+            },
+            {
+              "id": "10955025-967c-4b94-a646-ffaa480c0223",
+              "name": "device",
+              "value": "={{ $json.body.device.toUpperCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "6e9425e7-dea4-4382-879b-37495e236fd4",
+              "name": "source_tag",
+              "value": "={{ $json.body.source_tag ?? 'live' }} ",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2144,
+        608
+      ],
+      "id": "89340cfe-6f76-46b4-8860-1b7a3233b385",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "03e08379-d65b-49ed-bb12-2aaf5bc89268",
+              "leftValue": "={{ ['PAYMENT','ADDRESS','SHIPPING'].includes($json.checkout_step) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "81391888-e78b-4160-98e7-33745fdf8dc2",
+              "leftValue": "={{ $json.cart_value >= 0 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "5334076a-7d15-4e2d-9106-d07fc9bce522",
+              "leftValue": "={{ ['MOBILE','DESKTOP'].includes($json.device) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1920,
+        608
+      ],
+      "id": "4d0118e7-548f-4069-92d5-5e9ca4071916",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n    \"error\": \"Invalid checkout event\",\n    \"detail\": \"checkout_step must be PAYMENT, ADDRESS, or SHIPPING, and cart_value must be a non-negative number\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -1696,
+        704
+      ],
+      "id": "23c0a7f8-b51f-4731-bf1b-dfa87f7018fd",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c",
+          "mode": "list",
+          "cachedResultName": "Checkout Incident Detection Sheets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Cart Events",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.timestamp }}",
+            "checkout_step": "={{ $json.checkout_step }}",
+            "cart_value": "={{ $json.cart_value }}",
+            "device": "={{ $json.device }}",
+            "source_tag": "={{ $json.source_tag }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "checkout_step",
+              "displayName": "checkout_step",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cart_value",
+              "displayName": "cart_value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "device",
+              "displayName": "device",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source_tag",
+              "displayName": "source_tag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1696,
+        512
+      ],
+      "id": "41b7b6ff-b5c7-4642-983d-24342d1be511",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oUGNInsCHFJPhBW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2368,
+        192
+      ],
+      "id": "ed319498-94bd-4a77-89d3-b7d868cebd22",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c",
+          "mode": "list",
+          "cachedResultName": "Checkout Incident Detection Sheets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1663060047,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit#gid=1663060047"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "key",
+              "lookupValue": "=last_processed_timestamp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2144,
+        192
+      ],
+      "id": "0d762236-91f0-4c77-80ea-a4739573ee73",
+      "name": "Read State",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oUGNInsCHFJPhBW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2a9a37a2-8099-4dcf-a47c-a3517fada719",
+              "leftValue": "={{ $json.has_new_events }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1472,
+        192
+      ],
+      "id": "9eec4a36-5ca1-48b4-81ba-2bbd8b8bd983",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lastProcessed = new Date($('Read State').first().json.value);\nconst allEvents = $input.all();\nconst events = allEvents.filter(item => new Date(item.json.timestamp) > lastProcessed);\n\nreturn [{\n  json: {\n    has_new_events: events.length > 0,\n    new_event_count: events.length,\n    events: events.map(e => e.json),\n    latest_timestamp: events.length > 0\n      ? events.reduce((max, e) => (e.json.timestamp > max ? e.json.timestamp : max), events[0].json.timestamp)\n      : null\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1696,
+        192
+      ],
+      "id": "57b9ad6a-7973-4e6f-a0d1-c74ef82fdae2",
+      "name": "Filter New Events"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c",
+          "mode": "list",
+          "cachedResultName": "Checkout Incident Detection Sheets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 527389971,
+          "mode": "list",
+          "cachedResultName": "Baseline Metrics",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit#gid=527389971"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1248,
+        96
+      ],
+      "id": "942fb2c1-50b0-4649-bd0c-0e61e98a85e2",
+      "name": "Read Baseline Metrics",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oUGNInsCHFJPhBW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c",
+          "mode": "list",
+          "cachedResultName": "Checkout Incident Detection Sheets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Cart Events",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1920,
+        192
+      ],
+      "id": "b2b90e0b-90fa-4606-b446-ac0fcede5a7e",
+      "name": "Read Cart Events",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oUGNInsCHFJPhBW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -816,
+        304
+      ],
+      "id": "fd5721dc-4ed3-4a2e-a44d-9a389a5f4c3a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "epJPTsRHwnQFwQBF",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.stringify($json) }}",
+        "options": {
+          "systemMessage": "=You are the checkout incident triage engine. You will receive data for ONE checkout\nstep's aggregated events, already evaluated against the business rules —\nstep_severity and step_action are precomputed; do not recalculate them.\n\nWrite one concise sentence (the \"reason\") explaining why this step is rated\nstep_severity, referencing triggered_rules_text.\n\nRespond with ONLY valid JSON, no markdown, no commentary:\n{ \"reason\": \"<one sentence>\" }"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -800,
+        96
+      ],
+      "id": "d510a622-7601-4274-aef7-e11975e29169",
+      "name": "AI Agent",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c",
+          "mode": "list",
+          "cachedResultName": "Checkout Incident Detection Sheets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 261112097,
+          "mode": "list",
+          "cachedResultName": "Agent Commands",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit#gid=261112097"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "command_id": "={{ $json.command_id }}",
+            "action": "={{ $json.action }}",
+            "severity": "={{ $json.severity }}",
+            "reason": "={{ $json.reason }}",
+            "checkout_step": "={{ $json.checkout_step }}",
+            "cart_value": "={{ $json.cart_value }}",
+            "device": "={{ $json.device }}",
+            "baseline_rate": "={{ $json.baseline_rate }}",
+            "timestamp": "={{ $json.timestamp }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "command_id",
+              "displayName": "command_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "action",
+              "displayName": "action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "checkout_step",
+              "displayName": "checkout_step",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cart_value",
+              "displayName": "cart_value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "device",
+              "displayName": "device",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "baseline_rate",
+              "displayName": "baseline_rate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -224,
+        96
+      ],
+      "id": "c98f95a7-a3bf-4c97-bfdc-0481cb325f67",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oUGNInsCHFJPhBW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const events = $('Filter New Events').first().json.events;\nconst baselines = $('Read Baseline Metrics').all().reduce((acc, i) => {\n  acc[i.json.checkout_step] = Number(i.json.baseline_rate);\n  return acc;\n}, {});\n\nconst HIGH_VALUE_THRESHOLD = 1500;\nconst MOBILE_FAILURE_THRESHOLD = 2;\n\nconst byStep = {};\nfor (const e of events) {\n  byStep[e.checkout_step] = byStep[e.checkout_step] || { count: 0, mobile: 0, maxValue: 0, maxValueDevice: null };\n  const s = byStep[e.checkout_step];\n  s.count++;\n  if (e.device === 'MOBILE') s.mobile++;\n  if (e.cart_value > s.maxValue) {\n    s.maxValue = e.cart_value;\n    s.maxValueDevice = e.device;\n  }\n}\n\nconst items = Object.entries(byStep).map(([step, s]) => {\n  const baseline_rate = baselines[step] ?? null;\n  const exceeds_baseline = baseline_rate != null ? s.count > baseline_rate : false;\n\n  const triggered_rules = [];\n  if (step === 'PAYMENT') triggered_rules.push('PAYMENT step (critical revenue impact)');\n  if (s.maxValue > HIGH_VALUE_THRESHOLD) triggered_rules.push(`cart value ${s.maxValue} exceeds ${HIGH_VALUE_THRESHOLD}`);\n  if (exceeds_baseline) triggered_rules.push(`event count ${s.count} exceeds baseline ${baseline_rate}`);\n  if (s.mobile >= MOBILE_FAILURE_THRESHOLD) triggered_rules.push(`${s.mobile} mobile failures (possible app bug)`);\n\n  const step_severity = triggered_rules.length > 0 ? 'HIGH' : 'LOW';\n  const step_action = step_severity === 'HIGH' ? 'ALERT' : 'LOG';\n\n  return {\n    json: {\n      checkout_step: step,\n      event_count: s.count,\n      mobile_failure_count: s.mobile,\n      max_cart_value: s.maxValue,\n      max_cart_value_device: s.maxValueDevice,\n      baseline_rate,\n      exceeds_baseline,\n      triggered_rules,\n      triggered_rules_text: triggered_rules.join('; ') || 'no rules triggered',\n      step_severity,\n      step_action\n    }\n  };\n});\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1024,
+        96
+      ],
+      "id": "0a0bfbf8-edc9-4723-8db6-038773695ddd",
+      "name": "Aggregate Batch"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const llmOutput = JSON.parse($json.output);\nconst stepData = $('Aggregate Batch').item.json;\n\nconst timestamp = $now.setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss');\nconst commandId = `CMD_${timestamp.replace(/[-: ]/g, '').slice(0, 14)}_${stepData.checkout_step}`;\n\nreturn {\n  json: {\n    command_id: commandId,\n    action: stepData.step_action,\n    severity: stepData.step_severity,\n    reason: llmOutput.reason,\n    checkout_step: stepData.checkout_step,\n    cart_value: stepData.max_cart_value,\n    device: stepData.max_cart_value_device,\n    baseline_rate: stepData.baseline_rate,\n    timestamp\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        96
+      ],
+      "id": "fbfebe94-3218-46fe-aa1f-aab85b4c2f16",
+      "name": "Assemble the Command Row"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#all-02-portfolioproject",
+          "mode": "name"
+        },
+        "text": "={{ $json.action === 'ALERT' ? '🚨' : '📝' }} *{{ $json.action }}* — {{ $json.severity }} severity\n*Step:* {{ $json.checkout_step }}  ·  *Cart value:* {{ $json.cart_value }}  ·  *Device:* {{ $json.device }}\n*Reason:* {{ $json.reason }}\n*Timestamp:* {{ $json.timestamp }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        192
+      ],
+      "id": "0c853034-a281-44a9-9d36-a9dda8196d1b",
+      "name": "Send a message",
+      "webhookId": "ce5026d0-9e08-45d4-8c52-c5b079022912",
+      "credentials": {
+        "slackApi": {
+          "id": "WkWUtvhKhjkO5dlP",
+          "name": "Slack account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c",
+          "mode": "list",
+          "cachedResultName": "Checkout Incident Detection Sheets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1663060047,
+          "mode": "list",
+          "cachedResultName": "State",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bOyIDJ7YjCkPmbX9fPjxxGPdPBJXf1Vpk9HR5zrrA2c/edit#gid=1663060047"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key": "last_processed_timestamp",
+            "value": "={{ $('Filter New Events').first().json.latest_timestamp ?? $now.setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "key"
+          ],
+          "schema": [
+            {
+              "id": "key",
+              "displayName": "key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "value",
+              "displayName": "value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        0
+      ],
+      "id": "309bb37d-7a51-4299-a080-d28079305fa4",
+      "name": "Update State",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oUGNInsCHFJPhBW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const timestamp = $now.setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss');\nconst commandId = `CMD_${timestamp.replace(/[-: ]/g, '').slice(0, 14)}_NOEVENT`;\n\nreturn [{\n  json: {\n    command_id: commandId,\n    action: 'LOG',\n    severity: 'LOW',\n    reason: 'No new checkout events to process',\n    checkout_step: 'N/A',\n    cart_value: 0,\n    device: 'N/A',\n    baseline_rate: null,\n    timestamp\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        544
+      ],
+      "id": "15170010-6ffd-4559-8875-44052addccfc",
+      "name": "No New Events"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "IngestionWebhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read State": {
+      "main": [
+        [
+          {
+            "node": "Read Cart Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Read Baseline Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No New Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter New Events": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Baseline Metrics": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Batch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Cart Events": {
+      "main": [
+        [
+          {
+            "node": "Filter New Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Assemble the Command Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Update State",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Batch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assemble the Command Row": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No New Events": {
+      "main": [
+        [
+          {
+            "node": "Update State",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2856d81a-fbc6-424c-985d-273b799f3226",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "617d0f35d9b6d192945677a302fa09b97c4d4cea58010c1e1af8f6a02ba57d77"
+  },
+  "nodeGroups": [],
+  "id": "fUZIqk54t2WV2Jq8",
+  "tags": []
+}
