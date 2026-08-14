@@ -1,0 +1,71 @@
+<svg viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5568"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="480" fill="#ffffff"/>
+
+  <text x="600" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1a202c">Multi-Reasoning Agent Decision Workflow (Langflow)</text>
+  <text x="600" y="64" text-anchor="middle" font-size="13" fill="#718096">Sequential 3-agent chain: decompose &#8594; recommend &#8594; red-team</text>
+
+  <!-- ChatInput -->
+  <rect x="30" y="180" width="150" height="90" rx="10" fill="#edf2f7" stroke="#a0aec0" stroke-width="1.5"/>
+  <text x="105" y="218" text-anchor="middle" font-size="14" font-weight="600" fill="#2d3748">Chat Input</text>
+  <text x="105" y="238" text-anchor="middle" font-size="11" fill="#4a5568">Decision Brief</text>
+  <text x="105" y="253" text-anchor="middle" font-size="11" fill="#4a5568">(raw scenario text)</text>
+
+  <!-- Planner Agent -->
+  <rect x="240" y="150" width="200" height="150" rx="10" fill="#e6f0ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="340" y="180" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">Planner Agent</text>
+  <text x="340" y="200" text-anchor="middle" font-size="11" fill="#2d3748">Decomposes the decision</text>
+  <text x="340" y="216" text-anchor="middle" font-size="10" fill="#4a5568">TASK_DECOMPOSITION</text>
+  <text x="340" y="231" text-anchor="middle" font-size="10" fill="#4a5568">MISSING_INFO</text>
+  <text x="340" y="246" text-anchor="middle" font-size="10" fill="#4a5568">DECISION_CRITERIA</text>
+  <text x="340" y="270" text-anchor="middle" font-size="10" fill="#718096">Does NOT recommend</text>
+  <text x="340" y="286" text-anchor="middle" font-size="10" fill="#94a3b8">GPT-4.1 &#183; max_iter 15</text>
+
+  <!-- Analyzer Agent -->
+  <rect x="500" y="150" width="200" height="150" rx="10" fill="#e6fff5" stroke="#10b981" stroke-width="2"/>
+  <text x="600" y="180" text-anchor="middle" font-size="15" font-weight="700" fill="#047857">Analyzer Agent</text>
+  <text x="600" y="200" text-anchor="middle" font-size="11" fill="#2d3748">Makes the recommendation</text>
+  <text x="600" y="216" text-anchor="middle" font-size="10" fill="#4a5568">RECOMMENDATION</text>
+  <text x="600" y="231" text-anchor="middle" font-size="10" fill="#4a5568">TRADEOFFS &#183; RISKS</text>
+  <text x="600" y="246" text-anchor="middle" font-size="10" fill="#4a5568">ASSUMPTIONS &#183; NEXT STEPS</text>
+  <text x="600" y="270" text-anchor="middle" font-size="10" fill="#718096">Must decide (no "it depends")</text>
+  <text x="600" y="286" text-anchor="middle" font-size="10" fill="#94a3b8">GPT-4.1 &#183; max_iter 15</text>
+
+  <!-- Critic Agent -->
+  <rect x="760" y="150" width="200" height="150" rx="10" fill="#fff1e6" stroke="#f97316" stroke-width="2"/>
+  <text x="860" y="180" text-anchor="middle" font-size="15" font-weight="700" fill="#c2410c">Critic Agent</text>
+  <text x="860" y="200" text-anchor="middle" font-size="11" fill="#2d3748">Red-teams the memo</text>
+  <text x="860" y="216" text-anchor="middle" font-size="10" fill="#4a5568">CRITIQUES (5) &#183; MISSING</text>
+  <text x="860" y="231" text-anchor="middle" font-size="10" fill="#4a5568">RISK ASSESSMENT</text>
+  <text x="860" y="246" text-anchor="middle" font-size="10" fill="#4a5568">ALTERNATIVE VIEW &#183; VERDICT</text>
+  <text x="860" y="270" text-anchor="middle" font-size="10" fill="#718096">APPROVE / REVISE / ESCALATE</text>
+  <text x="860" y="286" text-anchor="middle" font-size="10" fill="#94a3b8">GPT-4.1 &#183; max_iter 15</text>
+
+  <!-- Chat Output -->
+  <rect x="1020" y="180" width="150" height="90" rx="10" fill="#edf2f7" stroke="#a0aec0" stroke-width="1.5"/>
+  <text x="1095" y="218" text-anchor="middle" font-size="14" font-weight="600" fill="#2d3748">Chat Output</text>
+  <text x="1095" y="238" text-anchor="middle" font-size="11" fill="#4a5568">Final critique</text>
+  <text x="1095" y="253" text-anchor="middle" font-size="11" fill="#4a5568">+ verdict</text>
+
+  <!-- Arrows -->
+  <line x1="180" y1="225" x2="238" y2="225" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="440" y1="225" x2="498" y2="225" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="700" y1="225" x2="758" y2="225" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="960" y1="225" x2="1018" y2="225" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Legend / footer -->
+  <text x="600" y="360" text-anchor="middle" font-size="11" fill="#718096">Each arrow passes the full upstream Message (Langflow "response" &#8594; "input_value" edges) &#8212; no shared memory store between agents.</text>
+  <text x="600" y="380" text-anchor="middle" font-size="11" fill="#718096">API key resolved per-agent from OPENAI_API_KEY (env var reference, not hardcoded) &#183; n_messages history window = 100</text>
+
+  <rect x="380" y="410" width="14" height="14" fill="#e6f0ff" stroke="#3b82f6"/>
+  <text x="402" y="421" font-size="11" fill="#4a5568">Plan</text>
+  <rect x="460" y="410" width="14" height="14" fill="#e6fff5" stroke="#10b981"/>
+  <text x="482" y="421" font-size="11" fill="#4a5568">Decide</text>
+  <rect x="550" y="410" width="14" height="14" fill="#fff1e6" stroke="#f97316"/>
+  <text x="572" y="421" font-size="11" fill="#4a5568">Critique</text>
+</svg>
