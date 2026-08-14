@@ -1,0 +1,171 @@
+<svg viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6C5CE7"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1440" height="900" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="720" y="40" text-anchor="middle" font-size="26" font-weight="700" fill="#1a1b2e">NovaCart RAG Ingestion &amp; Retrieval Pipeline (n8n)</text>
+  <text x="720" y="64" text-anchor="middle" font-size="14" fill="#6b7280">Two connected n8n workflows: document ingestion into Pinecone, and a grounded chat agent that retrieves from it</text>
+
+  <!-- Lane 1: Ingestion -->
+  <rect x="30" y="90" width="1380" height="330" rx="14" fill="#FFFBEA" stroke="#F0D77B" stroke-width="1.5"/>
+  <text x="55" y="118" font-size="16" font-weight="700" fill="#92700A">RAG Ingestion Pipeline</text>
+  <text x="55" y="136" font-size="12" fill="#92700A">Runs on a schedule or manual form upload — reads NovaCart source docs, chunks, embeds, and upserts to Pinecone</text>
+
+  <!-- Ingestion nodes row -->
+  <!-- Schedule Trigger -->
+  <rect x="55" y="160" width="140" height="60" rx="10" fill="#F3F4F6" stroke="#6B7280"/>
+  <text x="125" y="184" text-anchor="middle" font-size="12" font-weight="600" fill="#374151">Schedule</text>
+  <text x="125" y="200" text-anchor="middle" font-size="12" font-weight="600" fill="#374151">Trigger</text>
+
+  <!-- Form Trigger alt -->
+  <rect x="55" y="240" width="140" height="60" rx="10" fill="#F3F4F6" stroke="#6B7280" stroke-dasharray="4,3"/>
+  <text x="125" y="264" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">On Form</text>
+  <text x="125" y="280" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">Submission (alt.)</text>
+
+  <!-- Search files -->
+  <rect x="235" y="160" width="150" height="60" rx="10" fill="#E8F0FE" stroke="#1A73E8"/>
+  <text x="310" y="184" text-anchor="middle" font-size="12" font-weight="600" fill="#1A4FA0">Google Drive</text>
+  <text x="310" y="200" text-anchor="middle" font-size="12" font-weight="600" fill="#1A4FA0">Search Files/Folders</text>
+
+  <!-- Download file -->
+  <rect x="425" y="160" width="150" height="60" rx="10" fill="#E8F0FE" stroke="#1A73E8"/>
+  <text x="500" y="184" text-anchor="middle" font-size="12" font-weight="600" fill="#1A4FA0">Google Drive</text>
+  <text x="500" y="200" text-anchor="middle" font-size="12" font-weight="600" fill="#1A4FA0">Download File</text>
+
+  <!-- Text Splitter -->
+  <rect x="615" y="240" width="150" height="60" rx="10" fill="#CCFBF1" stroke="#0D9488"/>
+  <text x="690" y="260" text-anchor="middle" font-size="11" font-weight="600" fill="#0F766E">Recursive Char.</text>
+  <text x="690" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#0F766E">Text Splitter</text>
+  <text x="690" y="290" text-anchor="middle" font-size="10" fill="#0F766E">size 500 / overlap 50</text>
+
+  <!-- Default Data Loader -->
+  <rect x="615" y="160" width="150" height="60" rx="10" fill="#CCFBF1" stroke="#0D9488"/>
+  <text x="690" y="184" text-anchor="middle" font-size="12" font-weight="600" fill="#0F766E">Default Data</text>
+  <text x="690" y="200" text-anchor="middle" font-size="12" font-weight="600" fill="#0F766E">Loader (binary)</text>
+
+  <!-- Embeddings OpenAI (ingestion) -->
+  <rect x="805" y="160" width="160" height="60" rx="10" fill="#D1FAE5" stroke="#10A37F"/>
+  <text x="885" y="182" text-anchor="middle" font-size="12" font-weight="600" fill="#0B6E56">Embeddings OpenAI</text>
+  <text x="885" y="198" text-anchor="middle" font-size="10" fill="#0B6E56">text-embedding-3-large (1024d)</text>
+
+  <!-- Pinecone Insert -->
+  <rect x="1005" y="160" width="180" height="70" rx="10" fill="#EDE9FE" stroke="#6C5CE7"/>
+  <text x="1095" y="184" text-anchor="middle" font-size="12" font-weight="700" fill="#4839C3">Pinecone Vector Store</text>
+  <text x="1095" y="200" text-anchor="middle" font-size="11" fill="#4839C3">Insert · index "vidyanovacart"</text>
+  <text x="1095" y="215" text-anchor="middle" font-size="10" fill="#4839C3">namespace: PROD</text>
+
+  <!-- Ingestion arrows -->
+  <path d="M195,190 L235,190" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M385,190 L425,190" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M575,190 L615,190" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M690,240 L690,220" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M765,190 L805,190" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M965,190 L1005,190" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M125,300 L125,330 L500,330 L500,220" stroke="#374151" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow)" fill="none"/>
+
+  <!-- Lane 2: Retrieval -->
+  <rect x="30" y="440" width="1380" height="420" rx="14" fill="#ECFDF5" stroke="#8FD9B6" stroke-width="1.5"/>
+  <text x="55" y="468" font-size="16" font-weight="700" fill="#0B6E56">Retrieval Pipeline (Grounded Chat Agent)</text>
+  <text x="55" y="486" font-size="12" fill="#0B6E56">Public chat interface — the agent must call the vector tool before answering, or say it doesn't know</text>
+
+  <!-- Chat Trigger -->
+  <rect x="55" y="520" width="150" height="60" rx="10" fill="#F3F4F6" stroke="#6B7280"/>
+  <text x="130" y="544" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">When Chat</text>
+  <text x="130" y="560" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">Message Received</text>
+
+  <!-- Novacart AI Agent -->
+  <rect x="250" y="500" width="220" height="100" rx="10" fill="#FEE2E2" stroke="#DC2626" stroke-width="2"/>
+  <text x="360" y="530" text-anchor="middle" font-size="14" font-weight="700" fill="#9F1239">Novacart AI Agent</text>
+  <text x="360" y="548" text-anchor="middle" font-size="10" fill="#9F1239">Must call retrieval tool first;</text>
+  <text x="360" y="562" text-anchor="middle" font-size="10" fill="#9F1239">answers only from retrieved text</text>
+  <text x="360" y="578" text-anchor="middle" font-size="10" fill="#9F1239">or refuses if not found</text>
+
+  <!-- Agent Brain LLM -->
+  <rect x="250" y="630" width="220" height="55" rx="10" fill="#D1FAE5" stroke="#10A37F"/>
+  <text x="360" y="653" text-anchor="middle" font-size="12" font-weight="600" fill="#0B6E56">Agent Brain: GPT-4.1</text>
+  <text x="360" y="669" text-anchor="middle" font-size="10" fill="#0B6E56">(chat model)</text>
+
+  <!-- Memory -->
+  <rect x="510" y="630" width="150" height="55" rx="10" fill="#F3F4F6" stroke="#6B7280"/>
+  <text x="585" y="653" text-anchor="middle" font-size="12" font-weight="600" fill="#374151">Memory</text>
+  <text x="585" y="669" text-anchor="middle" font-size="10" fill="#374151">Buffer Window</text>
+
+  <!-- Pinecone Retrieve (tool) -->
+  <rect x="720" y="500" width="200" height="80" rx="10" fill="#EDE9FE" stroke="#6C5CE7" stroke-width="2"/>
+  <text x="820" y="524" text-anchor="middle" font-size="12" font-weight="700" fill="#4839C3">Pinecone Vector Store</text>
+  <text x="820" y="540" text-anchor="middle" font-size="11" fill="#4839C3">Retrieve-as-Tool · top K = 5</text>
+  <text x="820" y="556" text-anchor="middle" font-size="10" fill="#4839C3">namespace: PROD</text>
+  <text x="820" y="570" text-anchor="middle" font-size="9" fill="#4839C3">"Nova Pinecone Vector Index"</text>
+
+  <!-- Embeddings (query) -->
+  <rect x="980" y="500" width="170" height="60" rx="10" fill="#D1FAE5" stroke="#10A37F"/>
+  <text x="1065" y="524" text-anchor="middle" font-size="12" font-weight="600" fill="#0B6E56">Embeddings OpenAI</text>
+  <text x="1065" y="540" text-anchor="middle" font-size="10" fill="#0B6E56">text-embedding-3-large</text>
+  <text x="1065" y="554" text-anchor="middle" font-size="10" fill="#0B6E56">(query vectorization)</text>
+
+  <!-- Reranker Cohere -->
+  <rect x="1200" y="500" width="180" height="60" rx="10" fill="#FFEDD5" stroke="#F97316"/>
+  <text x="1290" y="530" text-anchor="middle" font-size="12" font-weight="600" fill="#9A3412">Reranker Cohere</text>
+  <text x="1290" y="547" text-anchor="middle" font-size="10" fill="#9A3412">re-scores retrieved chunks</text>
+
+  <!-- User response -->
+  <rect x="250" y="760" width="220" height="55" rx="10" fill="#F3F4F6" stroke="#6B7280"/>
+  <text x="360" y="783" text-anchor="middle" font-size="12" font-weight="600" fill="#374151">Grounded Answer</text>
+  <text x="360" y="799" text-anchor="middle" font-size="10" fill="#374151">streamed back to chat UI</text>
+
+  <!-- Retrieval arrows -->
+  <path d="M205,550 L250,550" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M360,600 L360,630" stroke="#10A37F" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M470,657 L510,657" stroke="#6B7280" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
+  <path d="M470,540 L720,540" stroke="#6C5CE7" stroke-width="2" marker-end="url(#arrowPurple)" fill="none"/>
+  <path d="M920,530 L980,530" stroke="#6C5CE7" stroke-width="2" marker-end="url(#arrowPurple)" fill="none"/>
+  <path d="M1150,530 L1200,530" stroke="#6C5CE7" stroke-width="2" marker-end="url(#arrowPurple)" fill="none"/>
+  <path d="M360,600 L360,760" stroke="#374151" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)" fill="none"/>
+
+  <!-- Cross-lane link: ingestion feeds the same Pinecone index -->
+  <path d="M1095,230 C 1095,340 900,400 820,500" stroke="#6C5CE7" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowPurple)" fill="none"/>
+  <text x="960" y="410" font-size="11" fill="#4839C3" font-style="italic">same Pinecone index</text>
+
+  <!-- Explicit arrowhead triangles (rendered on top for cross-viewer compatibility) -->
+  <g>
+    <polygon points="226,185 226,195 235,190" fill="#374151"/>
+    <polygon points="416,185 416,195 425,190" fill="#374151"/>
+    <polygon points="606,185 606,195 615,190" fill="#374151"/>
+    <polygon points="685,229 695,229 690,220" fill="#374151"/>
+    <polygon points="796,185 796,195 805,190" fill="#374151"/>
+    <polygon points="996,185 996,195 1005,190" fill="#374151"/>
+    <polygon points="495,229 505,229 500,220" fill="#374151"/>
+    <polygon points="241,545 241,555 250,550" fill="#374151"/>
+    <polygon points="355,621 365,621 360,630" fill="#10A37F"/>
+    <polygon points="501,652 501,662 510,657" fill="#374151"/>
+    <polygon points="711,535 711,545 720,540" fill="#6C5CE7"/>
+    <polygon points="971,525 971,535 980,530" fill="#6C5CE7"/>
+    <polygon points="1191,525 1191,535 1200,530" fill="#6C5CE7"/>
+    <polygon points="355,751 365,751 360,760" fill="#374151"/>
+    <polygon points="815,491 825,491 820,500" fill="#6C5CE7"/>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(1080,650)">
+    <rect x="0" y="0" width="14" height="14" fill="#E8F0FE" stroke="#1A73E8"/>
+    <text x="20" y="12" font-size="11" fill="#374151">Google Drive</text>
+    <rect x="0" y="24" width="14" height="14" fill="#D1FAE5" stroke="#10A37F"/>
+    <text x="20" y="36" font-size="11" fill="#374151">OpenAI</text>
+    <rect x="0" y="48" width="14" height="14" fill="#EDE9FE" stroke="#6C5CE7"/>
+    <text x="20" y="60" font-size="11" fill="#374151">Pinecone</text>
+    <rect x="0" y="72" width="14" height="14" fill="#FFEDD5" stroke="#F97316"/>
+    <text x="20" y="84" font-size="11" fill="#374151">Cohere</text>
+    <rect x="0" y="96" width="14" height="14" fill="#FEE2E2" stroke="#DC2626"/>
+    <text x="20" y="108" font-size="11" fill="#374151">Orchestrator (Agent)</text>
+    <rect x="0" y="120" width="14" height="14" fill="#F3F4F6" stroke="#6B7280"/>
+    <text x="20" y="132" font-size="11" fill="#374151">n8n core / trigger</text>
+  </g>
+</svg>
