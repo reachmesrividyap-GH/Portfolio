@@ -1,0 +1,788 @@
+{
+  "agent_id": "agent_0101m0aa4gc3eqsab9jadktbty38",
+  "name": "05-ElevenLabs-ProductHealthMonitor",
+  "conversation_config": {
+    "asr": {
+      "quality": "high",
+      "provider": "scribe_realtime",
+      "user_input_audio_format": "pcm_16000",
+      "keywords": []
+    },
+    "turn": {
+      "turn_timeout": 7,
+      "initial_wait_time": null,
+      "silence_end_call_timeout": -1,
+      "mode": "turn",
+      "turn_eagerness": "normal",
+      "spelling_patience": "auto",
+      "speculative_turn": false,
+      "retranscribe_on_turn_timeout": false,
+      "turn_model": "turn_v3",
+      "interruption_ignore_terms": [],
+      "interruption_ignore_term_languages": [],
+      "merge_with_default_ignore_terms": false,
+      "transcribe_on_disabled_interruptions": false,
+      "soft_timeout_config": {
+        "timeout_seconds": -1,
+        "message": "Hhmmmm...yeah.",
+        "additional_soft_timeout_messages": [],
+        "use_llm_generated_message": false,
+        "randomize_fillers": false,
+        "max_soft_timeouts_per_generation": 1,
+        "llm_generated_message_prompt_override": null,
+        "disable_until_first_user_message": false
+      }
+    },
+    "tts": {
+      "model_id": "eleven_flash_v2",
+      "voice_id": "cjVigY5qzO86Huf0OWal",
+      "supported_voices": [],
+      "expressive_mode": false,
+      "suggested_audio_tags": [],
+      "agent_output_audio_format": "pcm_16000",
+      "optimize_streaming_latency": 3,
+      "stability": 0.5,
+      "speed": 1,
+      "similarity_boost": 0.8,
+      "text_normalisation_type": "system_prompt",
+      "pronunciation_dictionary_locators": [],
+      "enable_phoneme_tags": true,
+      "audio_effects": null
+    },
+    "conversation": {
+      "text_only": false,
+      "max_duration_seconds": 600,
+      "max_duration_seconds_after_last_agent_message": null,
+      "client_events": [
+        "audio",
+        "interruption",
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction",
+        "agent_chat_response_part"
+      ],
+      "file_input": {
+        "enabled": true,
+        "max_files_in_memory": 10,
+        "max_files_per_conversation": 10
+      },
+      "monitoring_enabled": false,
+      "monitoring_events": [
+        "user_transcript",
+        "agent_response",
+        "agent_response_correction"
+      ],
+      "dtmf_input_settings": null,
+      "background_sound": {
+        "source_type": null,
+        "source_id": null,
+        "volume": 0.15,
+        "crossfade_loop": true
+      },
+      "source_attribution": true
+    },
+    "language_presets": {},
+    "vad": {
+      "background_voice_detection": false
+    },
+    "agent": {
+      "first_message": "Hello! How can I help you today?\n\nHi, you've reached the TaskFlow Product Health Monitor. I can connect you with a specialist on user feedback and NPS, support ticket trends and churn risk, or product metrics like engagement and conversion. What would you like to know?",
+      "language": "en",
+      "hinglish_mode": false,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      },
+      "disable_first_message_interruptions": false,
+      "max_conversation_duration_message": "",
+      "text_behavior_overrides": null,
+      "prompt": {
+        "prompt": "You are a helpful assistant.\n\n## Global Context\nYou are the TaskFlow Product Health Monitor, a voice assistant that helps the TaskFlow PM/TPM team get accurate, up-to-date information about product health across user feedback, support tickets, and product metrics. TaskFlow is a project management SaaS product with 9,764 paying customers and $14.88M ARR, currently working through elevated support volume, declining NPS, softening mobile engagement, and a declining free-to-paid conversion rate.\n\n## Global Rules \n- Answer ONLY from the knowledge base. Never speculate or make up information.\n- Be concise. Lead with the most important fact or number first, then offer to go deeper.\n- Use specific numbers, dates, categories, and account names from the documents \u2014 never round or approximate a figure that exists exactly in the source data.\n- If asked about something not in the knowledge base, say: \"I don't have that in my current product health data. I'd suggest checking the relevant dashboard or team directly.\"\n- After answering, ask: \"Anything else about product health I can help with?\"\n- Never volunteer individual account ARR or contract terms unless explicitly asked.\n- Never speculate about the cause of a customer's churn risk beyond what's documented \u2014 state the flagged driver, don't editorialize.\n- Keep a professional but approachable tone \u2014 you are a helpful colleague giving a briefing, not a corporate robot.\n- Stay within your own specialist's scope. If the question belongs to another specialist's domain, say so briefly and let the system route \u2014 do not attempt to answer it yourself.",
+        "llm": "gemini-2.5-flash",
+        "reasoning_effort": null,
+        "opener": null,
+        "thinking_budget": 0,
+        "enable_reasoning_summary": false,
+        "temperature": 0,
+        "max_tokens": -1,
+        "tool_ids": [],
+        "built_in_tools": {
+          "transfer_to_agent": null,
+          "update_state": null,
+          "memory_entry_search": null,
+          "run_subagent": null,
+          "request_help": null,
+          "end_call": null,
+          "language_detection": null,
+          "transfer_to_number": null,
+          "skip_turn": null,
+          "play_keypad_touch_tone": null,
+          "voicemail_detection": null,
+          "transfer_to_genesys": null,
+          "transfer_to_genesys_chat": null,
+          "transfer_to_genesys_bot": null
+        },
+        "enable_parallel_tool_calls": false,
+        "mcp_server_ids": [],
+        "native_mcp_server_ids": [],
+        "knowledge_base": [],
+        "custom_llm": null,
+        "bedrock_llm": null,
+        "speech_engine": null,
+        "ignore_default_personality": true,
+        "rag": {
+          "enabled": false,
+          "embedding_model": "e5_mistral_7b_instruct",
+          "optional_rag_enabled": false,
+          "max_vector_distance": 0.6,
+          "max_documents_length": 50000,
+          "max_retrieved_rag_chunks_count": 20,
+          "num_candidates": null,
+          "query_rewrite_prompt_override": null,
+          "knowledge_base_tool_info": null
+        },
+        "timezone": "Asia/Calcutta",
+        "backup_llm_config": {
+          "preference": "default"
+        },
+        "cascade_timeout_seconds": 4,
+        "tools": []
+      }
+    }
+  },
+  "metadata": {
+    "created_at_unix_secs": 1787052573,
+    "updated_at_unix_secs": 1787063427
+  },
+  "platform_settings": {
+    "evaluation": {
+      "criteria": []
+    },
+    "widget": {
+      "variant": "full",
+      "placement": "bottom-right",
+      "expandable": "never",
+      "avatar": {
+        "type": "orb",
+        "color_1": "#2792dc",
+        "color_2": "#9ce6e6"
+      },
+      "feedback_mode": "during",
+      "end_feedback": {
+        "type": "rating"
+      },
+      "bg_color": "#ffffff",
+      "text_color": "#000000",
+      "btn_color": "#000000",
+      "btn_text_color": "#ffffff",
+      "border_color": "#e1e1e1",
+      "focus_color": "#000000",
+      "border_radius": null,
+      "btn_radius": null,
+      "action_text": null,
+      "start_call_text": null,
+      "end_call_text": null,
+      "expand_text": null,
+      "listening_text": null,
+      "speaking_text": null,
+      "shareable_page_text": null,
+      "shareable_page_show_terms": true,
+      "terms_text": "#### Terms and conditions\n\nBy clicking \"Agree,\" and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as described in the Privacy Policy.\nIf you do not wish to have your conversations recorded, please refrain from using this service.",
+      "terms_html": "<h4>Terms and conditions</h4>\n<p>By clicking &quot;Agree,&quot; and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as described in the Privacy Policy.\nIf you do not wish to have your conversations recorded, please refrain from using this service.</p>\n",
+      "terms_key": null,
+      "show_avatar_when_collapsed": false,
+      "disable_banner": false,
+      "override_link": null,
+      "markdown_link_allowed_hosts": [],
+      "markdown_link_include_www": true,
+      "markdown_link_allow_http": true,
+      "mic_muting_enabled": false,
+      "transcript_enabled": false,
+      "text_input_enabled": true,
+      "conversation_mode_toggle_enabled": false,
+      "default_expanded": false,
+      "always_expanded": false,
+      "dismissible": false,
+      "show_agent_status": false,
+      "show_conversation_id": true,
+      "strip_audio_tags": true,
+      "syntax_highlight_theme": null,
+      "text_contents": {
+        "main_label": null,
+        "start_call": null,
+        "start_chat": null,
+        "new_call": null,
+        "end_call": null,
+        "mute_microphone": null,
+        "change_language": null,
+        "collapse": null,
+        "expand": null,
+        "copied": null,
+        "accept_terms": null,
+        "dismiss_terms": null,
+        "listening_status": null,
+        "speaking_status": null,
+        "connecting_status": null,
+        "chatting_status": null,
+        "input_label": null,
+        "input_placeholder": null,
+        "input_placeholder_text_only": null,
+        "input_placeholder_new_conversation": null,
+        "user_ended_conversation": null,
+        "agent_ended_conversation": null,
+        "conversation_id": null,
+        "error_occurred": null,
+        "copy_id": null,
+        "initiate_feedback": null,
+        "request_follow_up_feedback": null,
+        "thanks_for_feedback": null,
+        "thanks_for_feedback_details": null,
+        "follow_up_feedback_placeholder": null,
+        "submit": null,
+        "go_back": null,
+        "send_message": null,
+        "text_mode": null,
+        "voice_mode": null,
+        "switched_to_text_mode": null,
+        "switched_to_voice_mode": null,
+        "copy": null,
+        "download": null,
+        "wrap": null,
+        "agent_working": null,
+        "agent_done": null,
+        "agent_error": null,
+        "attach_file": null,
+        "remove_file": null,
+        "file_upload_error": null,
+        "file_type_unsupported": null,
+        "file_too_large": null,
+        "file_limit_reached": null,
+        "typing_indicator": null
+      },
+      "styles": {
+        "base": null,
+        "base_hover": null,
+        "base_active": null,
+        "base_border": null,
+        "base_subtle": null,
+        "base_primary": null,
+        "base_error": null,
+        "accent": null,
+        "accent_hover": null,
+        "accent_active": null,
+        "accent_border": null,
+        "accent_subtle": null,
+        "accent_primary": null,
+        "overlay_padding": null,
+        "button_radius": null,
+        "input_radius": null,
+        "bubble_radius": null,
+        "sheet_radius": null,
+        "compact_sheet_radius": null,
+        "dropdown_sheet_radius": null
+      },
+      "show_resize_button": true,
+      "language_selector": false,
+      "supports_text_only": true,
+      "custom_avatar_path": null,
+      "language_presets": {}
+    },
+    "data_collection": {},
+    "data_collection_scopes": {},
+    "analysis_items": null,
+    "overrides": {
+      "conversation_config_override": {
+        "asr": {
+          "keywords": false
+        },
+        "turn": {
+          "soft_timeout_config": {
+            "message": false
+          }
+        },
+        "tts": {
+          "model_id": false,
+          "voice_id": false,
+          "stability": false,
+          "speed": false,
+          "similarity_boost": false,
+          "pronunciation_dictionary_locators": false
+        },
+        "conversation": {
+          "text_only": true,
+          "max_duration_seconds": false
+        },
+        "agent": {
+          "first_message": false,
+          "language": false,
+          "max_conversation_duration_message": false,
+          "prompt": {
+            "prompt": false,
+            "llm": false,
+            "tool_ids": false,
+            "native_mcp_server_ids": false,
+            "knowledge_base": false
+          }
+        }
+      },
+      "custom_llm_extra_body": false,
+      "enable_conversation_initiation_client_data_from_webhook": false,
+      "enable_starting_workflow_node_id_from_client": false,
+      "enable_procedure_ids_from_client": false
+    },
+    "workspace_overrides": {
+      "conversation_initiation_client_data_webhook": null,
+      "webhooks": {
+        "post_call_webhook_id": null,
+        "events": [
+          "transcript"
+        ],
+        "transcript_format": "json",
+        "send_audio": false
+      }
+    },
+    "testing": {
+      "attached_tests": [],
+      "referenced_tests_ids": []
+    },
+    "archived": false,
+    "guardrails": {
+      "version": "1",
+      "focus": {
+        "is_enabled": false
+      },
+      "prompt_injection": {
+        "is_enabled": false
+      },
+      "synthetic_voice": {
+        "is_enabled": false,
+        "trigger_action": {
+          "type": "end_call"
+        }
+      },
+      "content": {
+        "execution_mode": "streaming",
+        "config": {
+          "sexual": {
+            "is_enabled": false,
+            "threshold": "medium"
+          },
+          "violence": {
+            "is_enabled": false,
+            "threshold": "medium"
+          },
+          "harassment": {
+            "is_enabled": false,
+            "threshold": "medium"
+          },
+          "self_harm": {
+            "is_enabled": false,
+            "threshold": "medium"
+          },
+          "profanity": {
+            "is_enabled": false,
+            "threshold": "medium"
+          },
+          "religion_or_politics": {
+            "is_enabled": false,
+            "threshold": "medium"
+          },
+          "medical_and_legal_information": {
+            "is_enabled": false,
+            "threshold": "medium"
+          }
+        },
+        "trigger_action": {
+          "type": "end_call"
+        }
+      },
+      "moderation": null,
+      "custom": {
+        "config": {
+          "configs": []
+        }
+      }
+    },
+    "summary_language": null,
+    "auto_translate_transcript_to_app_language": null,
+    "auth": {
+      "enable_auth": false,
+      "allowlist": [],
+      "require_origin_header": false,
+      "shareable_token": null
+    },
+    "call_limits": {
+      "agent_concurrency_limit": -1,
+      "daily_limit": 100000,
+      "bursting_enabled": true
+    },
+    "queueing_config": {
+      "enabled": false,
+      "wait_timeout_seconds": 180
+    },
+    "ban": null,
+    "smb_metadata": null,
+    "privacy": {
+      "record_voice": true,
+      "retention_days": -1,
+      "delete_transcript_and_pii": false,
+      "delete_audio": false,
+      "apply_to_existing_conversations": false,
+      "zero_retention_mode": false,
+      "conversation_history_redaction": {
+        "enabled": false,
+        "entities": []
+      }
+    },
+    "trust_context": "unknown",
+    "analysis_llm": "gemini-2.5-flash",
+    "analysis_bedrock_llm": null,
+    "analysis_llm_billed": false,
+    "topic_discovery": {
+      "enabled": true
+    },
+    "sentiment_analysis": {
+      "enabled": true
+    },
+    "simulation_library": {
+      "enabled": false,
+      "test_ids": []
+    },
+    "alerting": null,
+    "overview_dashboard_template_id": null,
+    "safety": {
+      "is_blocked_ivc": false,
+      "is_blocked_non_ivc": false,
+      "ignore_safety_evaluation": false
+    }
+  },
+  "phone_numbers": [],
+  "whatsapp_accounts": [],
+  "workflow": {
+    "edges": {
+      "edge_01m0ada15rezgsha4j37qx46km": {
+        "source": "start_node",
+        "target": "node_01m0ada15keddrafr54817dg5h",
+        "forward_condition": {
+          "label": null,
+          "type": "unconditional"
+        },
+        "backward_condition": null
+      },
+      "edge_01m0aepwn7e0v84afja9w6a7h3": {
+        "source": "node_01m0ada15keddrafr54817dg5h",
+        "target": "node_01m0aepwn0e079b9ej63r0946a",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is asking about NPS, net promoter score, user feedback, app reviews, app store ratings, user interviews, user sentiment, feature requests, in-app feedback, or what users are saying."
+        },
+        "backward_condition": null
+      },
+      "edge_01m0ag144bekrsc58rfdtt1zf7": {
+        "source": "node_01m0ada15keddrafr54817dg5h",
+        "target": "node_01m0ag1445eemtxmapgsm4n1ty",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is asking about support tickets, ticket volume, ticket categories, resolution times, CSAT, customer satisfaction scores, escalations, churn risk, at-risk accounts, or support team capacity."
+        },
+        "backward_condition": null
+      },
+      "edge_01m0ah47qee0c8q5ghj0htwj3v": {
+        "source": "node_01m0ada15keddrafr54817dg5h",
+        "target": "node_01m0ah47q8ep3tn46kq013t2pw",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is asking about product metrics, DAU, WAU, engagement, feature usage, conversion rates, free-to-paid conversion, retention, cohort analysis, MRR, revenue, page load times, performance, error rates, uptime, or competitive win/loss data."
+        },
+        "backward_condition": null
+      },
+      "edge_01m0aht2sye0rsaw079m74w9hw": {
+        "source": "node_01m0ag1445eemtxmapgsm4n1ty",
+        "target": "node_01m0aht2snex9vkj02bz1pna31",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user has indicated they are done, said goodbye, thanked the agent, or has no more questions."
+        },
+        "backward_condition": null
+      },
+      "edge_01m0ajj89jevktd9rmvpvhxw6s": {
+        "source": "node_01m0ah47q8ep3tn46kq013t2pw",
+        "target": "node_01m0aht2snex9vkj02bz1pna31",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user has indicated they are done, said goodbye, thanked the agent, or has no more questions."
+        },
+        "backward_condition": null
+      },
+      "edge_01m0ajjsqxe8p8vppa32t3497t": {
+        "source": "node_01m0aepwn0e079b9ej63r0946a",
+        "target": "node_01m0aht2snex9vkj02bz1pna31",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user has indicated they are done, said goodbye, thanked the agent, or has no more questions."
+        },
+        "backward_condition": null
+      },
+      "edge_01m0ajxk8be9f860744mj150fc": {
+        "source": "node_01m0aepwn0e079b9ej63r0946a",
+        "target": "node_01m0ag1445eemtxmapgsm4n1ty",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is now asking about support tickets, ticket volume, ticket categories, resolution times, CSAT, churn risk, at-risk accounts, or support team capacity instead of user feedback topics."
+        },
+        "backward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is now asking about NPS, user feedback, app reviews, user interviews, user sentiment, feature requests, or in-app feedback instead of support ticket topics."
+        }
+      },
+      "edge_01m0ajy94be6ntpv2dmek1brb6": {
+        "source": "node_01m0aepwn0e079b9ej63r0946a",
+        "target": "node_01m0ah47q8ep3tn46kq013t2pw",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is now asking about product metrics, DAU, WAU, engagement, conversion rates, retention, MRR, revenue, page load times, performance, error rates, or competitive data instead of user feedback topics."
+        },
+        "backward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is now asking about NPS, user feedback, app reviews, user interviews, user sentiment, feature requests, or in-app feedback instead of product metrics topics."
+        }
+      },
+      "edge_01m0ak3r3sexvt24n6ewfq1f3a": {
+        "source": "node_01m0ag1445eemtxmapgsm4n1ty",
+        "target": "node_01m0ah47q8ep3tn46kq013t2pw",
+        "forward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is now asking about product metrics, DAU, WAU, engagement, conversion rates, retention, MRR, revenue, page load times, performance, error rates, or competitive data instead of support ticket topics."
+        },
+        "backward_condition": {
+          "label": null,
+          "type": "llm",
+          "condition": "The user is now asking about support tickets, ticket volume, ticket categories, resolution times, CSAT, churn risk, at-risk accounts, or support team capacity instead of product metrics topics."
+        }
+      }
+    },
+    "nodes": {
+      "start_node": {
+        "type": "start",
+        "position": {
+          "x": -6,
+          "y": -321
+        },
+        "edge_order": [
+          "edge_01m0ada15rezgsha4j37qx46km"
+        ]
+      },
+      "node_01m0ada15keddrafr54817dg5h": {
+        "type": "override_agent",
+        "position": {
+          "x": 0,
+          "y": -203.50000381469727
+        },
+        "edge_order": [
+          "edge_01m0aepwn7e0v84afja9w6a7h3",
+          "edge_01m0ag144bekrsc58rfdtt1zf7",
+          "edge_01m0ah47qee0c8q5ghj0htwj3v"
+        ],
+        "conversation_config": {
+          "turn": {
+            "turn_eagerness": null,
+            "spelling_patience": null,
+            "speculative_turn": null,
+            "retranscribe_on_turn_timeout": null
+          },
+          "tts": {
+            "voice_id": null
+          },
+          "conversation": {
+            "client_events": null
+          },
+          "agent": {
+            "prompt": {
+              "prompt": null,
+              "llm": null,
+              "built_in_tools": {}
+            }
+          }
+        },
+        "additional_prompt": "You are the intake router for the TaskFlow Product Health Monitor. Your ONLY job is to understand what data the caller wants and route them to the right analyst.\n\u00a0\nDO NOT answer any data questions yourself. Acknowledge the question briefly and let the system route.\n\u00a0\nRouting guide:\n- Questions about NPS, app reviews, user interviews, feature requests, user sentiment, or in-app feedback submissions\n\n\u2192 User Feedback Analyst\n- Questions about support tickets, ticket volume, categories, resolution times, CSAT, churn risk accounts, or support team capacity \n\n\u2192 Support Ticket Analyst\n- Questions about DAU/WAU, engagement, conversion rates, retention, cohort analysis, revenue/MRR, page load times, error rates, or competitive win/loss data\n\n\u2192 Product Metrics Analyst\n- If the question is vague (e.g., \"how's the product doing?\"), ask: \"Sure! Would you like to hear about user feedback and NPS, support ticket trends, or product metrics like engagement and conversion?\"",
+        "additional_knowledge_base": [],
+        "additional_tool_ids": [],
+        "label": "Greeter Subagent",
+        "entry_behavior": "auto",
+        "forced_tool_name": null
+      },
+      "node_01m0aepwn0e079b9ej63r0946a": {
+        "type": "override_agent",
+        "position": {
+          "x": -514.0368248772504,
+          "y": -124.5900201813094
+        },
+        "edge_order": [
+          "edge_01m0ajjsqxe8p8vppa32t3497t",
+          "edge_01m0ajxk8be9f860744mj150fc",
+          "edge_01m0ajy94be6ntpv2dmek1brb6"
+        ],
+        "conversation_config": {
+          "turn": {
+            "turn_eagerness": null,
+            "spelling_patience": null,
+            "speculative_turn": null,
+            "retranscribe_on_turn_timeout": null
+          },
+          "tts": {
+            "voice_id": null
+          },
+          "conversation": {
+            "client_events": null
+          },
+          "agent": {
+            "prompt": {
+              "prompt": null,
+              "llm": null,
+              "built_in_tools": {}
+            }
+          }
+        },
+        "additional_prompt": "You are the User Feedback Analyst for TaskFlow.\n\u00a0\n## Your Data\nYou have access to: NPS survey results, app store review summaries (iOS and Google Play), user interview insights 12 interviews), in-app feedback widget submissions, and feature request rankings.\n\u00a0\n## How to Answer\n- For NPS questions: give the score, the trend, and the top reasons for detractors and promoters.\n- For review questions: give the ratings, review volume, and top themes from negative and positive reviews.\n- For interview insights: reference specific findings and user quotes when relevant.\n- For feature requests: give the ranked list with request counts.\n- Always include the time period and sample size when citing data.\n\u00a0\n## Boundaries\n- Do NOT answer questions about support ticket volume, resolution times, or CSAT scores. Say: \"That data is in\n\u00a0 the support ticket track. Would you like me to redirect you there?\"\n- Do NOT answer questions about DAU, conversion rates, revenue, or retention metrics. Say: \"That falls under\n\u00a0 product metrics. Want me to redirect you?\"\n- Do NOT make product recommendations based on feedback. Present the data and let the PM decide.",
+        "additional_knowledge_base": [
+          {
+            "type": "file",
+            "name": "TaskFlow_User_Feedback_Data.docx",
+            "id": "noV5eC6IU5h38gunUyjg",
+            "usage_mode": "auto"
+          }
+        ],
+        "additional_tool_ids": [],
+        "label": "User Feedback Analyst Subagent",
+        "entry_behavior": "auto",
+        "forced_tool_name": null
+      },
+      "node_01m0ag1445eemtxmapgsm4n1ty": {
+        "type": "override_agent",
+        "position": {
+          "x": 30.819613387731778,
+          "y": 345.0600420691541
+        },
+        "edge_order": [
+          "edge_01m0aht2sye0rsaw079m74w9hw",
+          "edge_01m0ajxk8be9f860744mj150fc",
+          "edge_01m0ak3r3sexvt24n6ewfq1f3a"
+        ],
+        "conversation_config": {
+          "turn": {
+            "turn_eagerness": null,
+            "spelling_patience": null,
+            "speculative_turn": null,
+            "retranscribe_on_turn_timeout": null
+          },
+          "tts": {
+            "voice_id": null
+          },
+          "conversation": {
+            "client_events": null
+          },
+          "agent": {
+            "prompt": {
+              "prompt": null,
+              "llm": null,
+              "built_in_tools": {}
+            }
+          }
+        },
+        "additional_prompt": "You are the Support Ticket Analyst for TaskFlow.\n\u00a0\n## Your Data\nYou have access to: support ticket volume and trends, category breakdowns (performance, mobile, search, etc.), priority distribution, resolution times, escalation rates, CSAT scores, churn risk account data, and support team capacity metrics.\n\u00a0\n## How to Answer\n- For volume questions: give total count, daily average, month-over-month trend, and category breakdown.\n- For category deep-dives: give ticket count, percentage, affected segments, and engineering status if available.\n- For churn risk questions: name the at-risk accounts with \u00a0their ARR and the specific issues driving risk.\n- For team capacity questions: give headcount, tickets per agent, and hiring status.\n- Always compare to targets and previous periods.\n\u00a0\n## Boundaries\n- Do NOT answer questions about NPS scores, app reviews, or user interview findings. Say: \"That is user feedback data. Want me to redirect you to the feedback analyst?\"\n- Do NOT answer questions about DAU, conversion rates, or revenue metrics. Say: \"That is in the product metrics\n\u00a0 track. Want me to redirect you?\"\n- When discussing churn risk, be factual. Do not predict whether an account will actually churn.",
+        "additional_knowledge_base": [
+          {
+            "type": "file",
+            "name": "TaskFlow_Support_Ticket_Analytics.docx",
+            "id": "36torIHS8V28eNGFX2YQ",
+            "usage_mode": "auto"
+          }
+        ],
+        "additional_tool_ids": [],
+        "label": "Support Ticket Analyst Subagent",
+        "entry_behavior": "auto",
+        "forced_tool_name": null
+      },
+      "node_01m0ah47q8ep3tn46kq013t2pw": {
+        "type": "override_agent",
+        "position": {
+          "x": 520.0180032733224,
+          "y": -13.567106924353567
+        },
+        "edge_order": [
+          "edge_01m0ajj89jevktd9rmvpvhxw6s",
+          "edge_01m0ajy94be6ntpv2dmek1brb6",
+          "edge_01m0ak3r3sexvt24n6ewfq1f3a"
+        ],
+        "conversation_config": {
+          "turn": {
+            "turn_eagerness": null,
+            "spelling_patience": null,
+            "speculative_turn": null,
+            "retranscribe_on_turn_timeout": null
+          },
+          "tts": {
+            "voice_id": null
+          },
+          "conversation": {
+            "client_events": null
+          },
+          "agent": {
+            "prompt": {
+              "prompt": null,
+              "llm": null,
+              "built_in_tools": {}
+            }
+          }
+        },
+        "additional_prompt": "You are the Product Metrics Analyst for TaskFlow.\n\u00a0\n## Your Data\nYou have access to: revenue metrics (MRR, ARR, ARPA, net revenue retention), customer base numbers, engagement metrics (DAU, WAU, feature usage), conversion funnel data (free to paid), retention cohorts, product performance benchmarks (page\nload times, error rates, uptime), and competitive win/loss analysis.\n\u00a0\n## How to Answer\n- For revenue questions: give MRR, growth rate, and compare to previous periods.\n- For engagement questions: give DAU/WAU, DAU/MAU ratio, feature usage rankings, and trends.\n- For conversion questions: give the funnel breakdown with each stage's rate and what is causing drop-offs.\n- For retention questions: give cohort data and explain the trend.\n- For performance questions: give p50/p99 latencies, compare to targets, flag anything critical.\n- For competitive questions: give win/loss numbers and top reasons for losses.\n- Always state whether a metric is on target, above target, or below target.\n\u00a0\n## Boundaries\n- Do NOT answer questions about individual user feedback, NPS details, or interview quotes. Say: \"That is in the user feedback track. Want me to redirect you?\"\n- Do NOT answer questions about individual support tickets, CSAT, or churn risk accounts. Say: \"That is support ticket data. Want me to redirect you?\"\n- Present metrics objectively. Avoid value judgments like \"this is terrible\" \u2014 instead say \"this is 40% below target.\"",
+        "additional_knowledge_base": [
+          {
+            "type": "file",
+            "name": "TaskFlow_Product_Metrics.docx",
+            "id": "2EeKbv5cHlHLXJ4ZJ8q4",
+            "usage_mode": "auto"
+          }
+        ],
+        "additional_tool_ids": [],
+        "label": "Products Metrics Analyst Subagent",
+        "entry_behavior": "auto",
+        "forced_tool_name": null
+      },
+      "node_01m0aht2snex9vkj02bz1pna31": {
+        "type": "end",
+        "position": {
+          "x": 2.3159884479405335,
+          "y": 867.379900899752
+        },
+        "edge_order": [],
+        "return_when_nested": true
+      }
+    },
+    "prevent_subagent_loops": false
+  },
+  "access_info": {
+    "is_creator": true,
+    "creator_name": "REDACTED",
+    "creator_email": "REDACTED",
+    "role": "admin",
+    "anonymous_access_level_override": null,
+    "access_source": "creator"
+  },
+  "tags": [],
+  "version_id": null,
+  "branch_id": null,
+  "main_branch_id": "agtbrch_6601m0aa4gxzevm9xjwgg1afzt78",
+  "procedures": {},
+  "trust_context": "unknown"
+}
